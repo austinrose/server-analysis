@@ -11,7 +11,8 @@ def longterm(my_path, region, historical_path):
     done_files = my_path + '/analytics'
 
     for file in os.listdir(done_files):
-        if file != 'long-term':
+        # must change file[0] == 2 condition before year 3000
+        if file != 'long-term' and file[0] == 2:
             check_path = done_files + '/' + file
             check_list = os.listdir(check_path)
 

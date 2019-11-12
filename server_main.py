@@ -61,6 +61,7 @@ def analysis_main():
         df_checked[0].to_excel(writer, sheet_name='dev-fused-02')
         df_checked[1].to_excel(writer, sheet_name='prod-fused-04')
         df_checked[2].to_excel(writer, sheet_name='prod-fused-06')
+        dfout.to_excel(writer, sheet_name='Analysis')
         writer.save()
 
         # plot data from the day
@@ -86,7 +87,7 @@ def analysis_main():
 
         # move all output files to correct location
         if not_done == True:
-            shutil.move(filename, writedir + '/' + file)
+            shutil.move(filename, writedir + '/' + region + date + '_Original.csv')
             shutil.move(my_path + '/' + analysis_path, writedir + '/' + analysis_path)
             shutil.move(my_path + '/' + plot_path, writedir + '/' + plot_path)
             shutil.move(my_path + '/' + pickle_path, writedir + '/' + pickle_path)
@@ -96,6 +97,7 @@ def analysis_main():
         utl.serverplot.plot(long_plot[0], (region + ' Long Term Analysis'), (historical_path + '/' + region.lower() + '/' + region + '_Chart.png'))
         utl.serverplot.plot(long_plot[1], 'Long Term Server Accuracy', historical_path + '/all/AllData_Chart.png')
 
-analysis_main()
+if __name__ == "__main__":
+    analysis_main()
 
 
