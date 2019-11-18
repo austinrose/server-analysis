@@ -14,6 +14,8 @@ import analysis.historicaldata
 def analysis_main():
 
     # import necessary directories and search folders to see which data hasnt been checked yet
+
+    dropbox_path = '/Users/austinrose/Dropbox (PASSUR Aerospace)/A. Rose Files/Projects/diversion-analysis'
     my_path = os.getcwd()
     new_data = my_path + '/tmp'
     filelist = [f for f in os.listdir(new_data) if (os.path.isfile(os.path.join(new_data, f)) and f.endswith(".csv"))]
@@ -56,12 +58,15 @@ def analysis_main():
         # write data frame to pickle and save it 
         dfout.to_pickle(pickle_path)
 
+        #create new list of columns for excel output
+        out_col = ['Shown Diversions', 'True Diversions', 'False Diversions', 'Missed Diversions', 'Missing On-Time', 'On-Time Accuracy', 'Detection Accuracy', 'Server']
+
         # write output to analysis file
         writer = pd.ExcelWriter(analysis_path, engine='xlsxwriter')
         df_checked[0].to_excel(writer, sheet_name='dev-fused-02')
         df_checked[1].to_excel(writer, sheet_name='prod-fused-04')
         df_checked[2].to_excel(writer, sheet_name='prod-fused-06')
-        dfout.to_excel(writer, sheet_name='Analysis')
+        dfout.to_excel(writer, sheet_name='Analysis', header=out_col)
         writer.save()
 
         # plot data from the day
@@ -69,7 +74,8 @@ def analysis_main():
         utl.serverplot.plot(data, plot_title, plot_path)
 
         # check to see where to move data to
-        out_dir = my_path + '/analytics'
+        out_dir = dropbox_path 
+        #my_path + '/analytics'
 
         # create variable that is init at False but becomes True once the region directory is made to prevent doing same data twice
         not_done = False
