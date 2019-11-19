@@ -4,11 +4,11 @@ import os
 def longterm(my_path, region, historical_path):
 
     # open blank pkl from long-term/tmp
-    slate = pd.read_pickle(my_path +'/analytics/long-term/tmp/blankdf.pkl')
+    slate = pd.read_pickle(my_path +'/long-term/tmp/blankdf.pkl')
     slate = slate.drop(columns=['server'])
 
     # establish path to analysis directory
-    done_files = my_path + '/analytics'
+    done_files = my_path
 
     for file in os.listdir(done_files):
         # must change file[0] == 2 condition before year 3000
@@ -47,9 +47,9 @@ def longterm(my_path, region, historical_path):
     long_data.to_pickle(filename)
 
     # open both long term pkl files and do calculations for both to get overall server accuracy
-    all_data = pd.read_pickle(my_path +'/analytics/long-term/tmp/blankdf.pkl')
-    dfw_all = pd.read_pickle(my_path +'/analytics/long-term/dfw/dfw_long.pkl')
-    gtaa_all = pd.read_pickle(my_path +'/analytics/long-term/gtaa/gtaa_long.pkl')
+    all_data = pd.read_pickle(my_path +'/long-term/tmp/blankdf.pkl')
+    dfw_all = pd.read_pickle(my_path +'/long-term/dfw/dfw_long.pkl')
+    gtaa_all = pd.read_pickle(my_path +'/long-term/gtaa/gtaa_long.pkl')
 
     # remove server name column
     dfw_all.drop(columns=['server'])
@@ -74,7 +74,7 @@ def longterm(my_path, region, historical_path):
     all_plot = [all_data.ot_acc.tolist(), all_data.det_acc.tolist()]
 
     # write pkl file output
-    all_data.to_pickle(my_path + '/analytics/long-term/all/all_data.pkl')
+    all_data.to_pickle(my_path + '/long-term/all/all_data.pkl')
 
 
     return [plot_data, all_plot]

@@ -19,7 +19,7 @@ def analysis_main():
     my_path = os.getcwd()
     new_data = my_path + '/tmp'
     filelist = [f for f in os.listdir(new_data) if (os.path.isfile(os.path.join(new_data, f)) and f.endswith(".csv"))]
-    historical_path = my_path +'/analytics/long-term'
+    historical_path = dropbox_path +'/long-term'
 
     for file in filelist:
         # print file name that is currently being analyzed
@@ -99,7 +99,7 @@ def analysis_main():
             shutil.move(my_path + '/' + pickle_path, writedir + '/' + pickle_path)
         
         # add data to historical database and plot historical data
-        long_plot = analysis.historicaldata.longterm(my_path, region, historical_path)
+        long_plot = analysis.historicaldata.longterm(dropbox_path, region, historical_path)
         utl.serverplot.plot(long_plot[0], (region + ' Long Term Analysis'), (historical_path + '/' + region.lower() + '/' + region + '_Chart.png'))
         utl.serverplot.plot(long_plot[1], 'Long Term Server Accuracy', historical_path + '/all/AllData_Chart.png')
 
