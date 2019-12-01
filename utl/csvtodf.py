@@ -39,16 +39,19 @@ def csvsplit(filename, region):
     
     # remove header rows and section off each servers data
     list2 = search_rows[1:index_list[0]]
-    list4 = search_rows[index_list[0] + 3: index_list[1]]
-    list6 = search_rows[index_list[1] + 3: index_list[2]]
+    list3 = search_rows[index_list[0] + 3: index_list[1]]
+    list4 = search_rows[index_list[1] + 3: index_list[2]]
+    list6 = search_rows[index_list[2] + 3: index_list[3]]
+
 
     # convert lists into DataFrames
     df2 = pd.DataFrame(list2[1::], columns=list2[0])
+    df3 = pd.DataFrame(list3[1::], columns=list3[0])
     df4 = pd.DataFrame(list4[1::], columns=list4[0])
     df6 = pd.DataFrame(list6[1::], columns=list6[0])
 
     # put all 3 lists in an array and return that array
-    df_list = [df2, df4, df6]
+    df_list = [df2, df3, df4, df6]
 
     return df_list
 

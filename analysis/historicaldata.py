@@ -40,7 +40,7 @@ def longterm(my_path, region, historical_path):
     detval = round(detval, 2)
     long_data.det_acc = detval
 
-    long_data['server'] = ['server2', 'server4', 'server6']
+    long_data['server'] = ['server2', 'server3', 'server4', 'server6']
 
     plot_data = [long_data.ot_acc.tolist(), long_data.det_acc.tolist()]
 
@@ -68,7 +68,7 @@ def longterm(my_path, region, historical_path):
     all_data.det_acc = det
 
     # add server column back in
-    all_data['server'] = ['server2', 'server4', 'server6']
+    all_data['server'] = ['server2', 'server3', 'server4', 'server6']
 
     # get data to plot
     all_plot = [all_data.ot_acc.tolist(), all_data.det_acc.tolist()]

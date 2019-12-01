@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def plot(data, title, plot_path):
     plt.style.use('ggplot')
-    n = 3
+    n = 4
     on_time = data[0]
     detect = data[1]
     fig, ax = plt.subplots()
@@ -21,7 +21,7 @@ def plot(data, title, plot_path):
     ax.set_ylabel('%')
     ax.set_title(title)
     ax.set_xticks(index + bar_width / 2)
-    ax.set_xticklabels(('dev-fused-02','prod-fused-04','prod-fused-06'
+    ax.set_xticklabels(('dev-fused-02','dev-fused-03','prod-fused-04','prod-fused-06'
         ))
     ax.legend()
 

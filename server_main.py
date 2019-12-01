@@ -45,6 +45,7 @@ def analysis_main():
         df_all = server_df[0]
         df_all = df_all.append(server_df[1])
         df_all = df_all.append(server_df[2])
+        df_all = df_all.append(server_df[3])
 
         # look up all unqiue flights on flightaware and return list of unique fid's concatenated to a list of whether they diverted or not
         found_data = utl.searchtml.htmlfind(df_all)
@@ -64,8 +65,9 @@ def analysis_main():
         # write output to analysis file
         writer = pd.ExcelWriter(analysis_path, engine='xlsxwriter')
         df_checked[0].to_excel(writer, sheet_name='dev-fused-02')
-        df_checked[1].to_excel(writer, sheet_name='prod-fused-04')
-        df_checked[2].to_excel(writer, sheet_name='prod-fused-06')
+        df_checked[1].to_excel(writer, sheet_name='dev-fused-03')
+        df_checked[2].to_excel(writer, sheet_name='prod-fused-04')
+        df_checked[3].to_excel(writer, sheet_name='prod-fused-06')
         dfout.to_excel(writer, sheet_name='Analysis', header=out_col)
         writer.save()
 

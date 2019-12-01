@@ -31,7 +31,7 @@ def stats(df_checked, found_data):
     
     dfout = pd.DataFrame(rows)
     dfout.columns = ['shown', 'true', 'false', 'missed', 'missot', 'ot_acc', 'det_acc']
-    dfout['server'] = ['server2', 'server4', 'server6']
+    dfout['server'] = ['server2', 'server3', 'server4', 'server6']
     
     return dfout
 
