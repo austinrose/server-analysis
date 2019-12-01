@@ -20,7 +20,12 @@ def longterm(my_path, region, historical_path):
                 get_path = check_path + '/' + region
                 df_add = pd.read_pickle(get_path + '/' + region + file + '_df.pkl')
                 df_add = df_add.drop(columns=['server'])
-                slate = slate + df_add
+                if len(df_add) == 3:
+                    slate.loc[0] += df_add.loc[0]
+                    slate.loc[2] += df_add.loc[1]
+                    slate.loc[3] += df_add.loc[2]
+                elif len(df_add) == 4:
+                    slate = slate + df_add
     
     long_data = slate
     

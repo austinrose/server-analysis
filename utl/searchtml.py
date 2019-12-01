@@ -22,15 +22,17 @@ def htmlfind(df_all):
         table = soup.findAll("table", class_="prettyTable fullWidth tablesaw tablesaw-stack")
 
         # extract all rows in table and init output list 
-        if len(table) != 0:
+        if (len(table) != 0) and (len(table) != 1):
             rows = table[0].find_all("tr")
             outlist = []
-
-        # iterate through each row and concantenate data to output list
-        for tr in rows:
-            td = tr.find_all('td')
-            row = [tr.text for tr in td]
-            outlist.append(row)
+            # iterate through each row and concantenate data to output list
+            for tr in rows:
+                td = tr.find_all('td')
+                row = [tr.text for tr in td]
+                outlist.append(row)
+        else:
+            # populate outlist with generic data
+            outlist = [['01-Jan-2000 ', 'NaN', 'Ocean Reef Club (07FA)', 'Trenton Mercer (KTTN)', '11:06AM\xa0EST', '01:30PM\xa0EST', 'Scheduled']]
 
         
         # convert output list to data frame and find flights that are listed as diverted

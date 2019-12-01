@@ -8,7 +8,7 @@ Main Program Logic:
 
 2) cd into the main folder and run "python3 server_main.py" (server_main.py)
 
-3) Program will first split the CSV file input into 3 DataFrames for each server (/utl/csvtodf.py)
+3) Program will first split the CSV file input into 4 DataFrames for each server(/utl/csvtodf.py)
 
 4) All data is then concatenated into a single DataFrame where a unique list of flight tags is found and those are compared against        FlightAware's Data and return a DataFrame of flight tags and Bools whether the diversion notice is true or false (/utl/searchtml.py)
 

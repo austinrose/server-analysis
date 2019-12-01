@@ -32,17 +32,17 @@ def csvsplit(filename, region):
 
         string_row = str(row)
 
-        if 'rows' in string_row:
+        if ('rows' in string_row) or ('1 row' in string_row):
             index_list.append(counter)
 
         counter += 1
+    
     
     # remove header rows and section off each servers data
     list2 = search_rows[1:index_list[0]]
     list3 = search_rows[index_list[0] + 3: index_list[1]]
     list4 = search_rows[index_list[1] + 3: index_list[2]]
     list6 = search_rows[index_list[2] + 3: index_list[3]]
-
 
     # convert lists into DataFrames
     df2 = pd.DataFrame(list2[1::], columns=list2[0])
