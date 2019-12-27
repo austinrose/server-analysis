@@ -4,9 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def plot(data, title, plot_path):
+def plot(data, plot_data, name_list):
+    title = plot_data[1]
+    plot_path = plot_data[0]
+    
     plt.style.use('ggplot')
-    n = 4
+    n = len(name_list)
     on_time = data[0]
     detect = data[1]
     fig, ax = plt.subplots()
@@ -21,8 +24,7 @@ def plot(data, title, plot_path):
     ax.set_ylabel('%')
     ax.set_title(title)
     ax.set_xticks(index + bar_width / 2)
-    ax.set_xticklabels(('dev-fused-02','dev-fused-03','prod-fused-04','prod-fused-06'
-        ))
+    ax.set_xticklabels(name_list)
     ax.legend()
 
     def autolabel(rects):

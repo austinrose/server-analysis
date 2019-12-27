@@ -12,6 +12,7 @@ import utl.serverplot
 import analysis.historicaldata
 
 def analysis_main():
+    all_servers = ['dev-fused02', 'dev-fused03', 'prod-fused04', 'prod-fused06', 'prod-fused07']
 
     # import necessary directories and search folders to see which data hasnt been checked yet
 
@@ -37,16 +38,20 @@ def analysis_main():
         plot_path = (region + date + '_Chart.png')
         pickle_path = (region + date + '_df.pkl')
         plot_title = (region + ' ' + date + ' Diversion Analysis')
+        plot_data = [plot_path, plot_title]
         
         # read csv file and parse data into separate data frames for each server
-        server_df = utl.csvtodf.csvsplit(filename, region)
+        server_raw = utl.csvtodf.csvsplit(filename, region)
+        server_df = server_raw[0]
+        server_list = server_raw[1]
+        name_list = server_raw[2]
 
         # concatenate all server data into one data frame
         df_all = server_df[0]
-        df_all = df_all.append(server_df[1])
-        df_all = df_all.append(server_df[2])
-        df_all = df_all.append(server_df[3])
-
+        df_all.append(server_df[1])
+        for i in range(len(server_df)):
+                df_all = df_all.append(server_df[i])
+        
         # look up all unqiue flights on flightaware and return list of unique fid's concatenated to a list of whether they diverted or not
         found_data = utl.searchtml.htmlfind(df_all)
 
@@ -55,6 +60,7 @@ def analysis_main():
 
         # return analyzed output data in a data frame
         dfout = analysis.serverstats.stats(df_checked, found_data)
+        dfout['server'] = server_list
 
         # write data frame to pickle and save it 
         dfout.to_pickle(pickle_path)
@@ -64,16 +70,14 @@ def analysis_main():
 
         # write output to analysis file
         writer = pd.ExcelWriter(analysis_path, engine='xlsxwriter')
-        df_checked[0].to_excel(writer, sheet_name='dev-fused-02')
-        df_checked[1].to_excel(writer, sheet_name='dev-fused-03')
-        df_checked[2].to_excel(writer, sheet_name='prod-fused-04')
-        df_checked[3].to_excel(writer, sheet_name='prod-fused-06')
+        for i in range(len(df_checked)):
+            df_checked[i].to_excel(writer, sheet_name=name_list[i])
         dfout.to_excel(writer, sheet_name='Analysis', header=out_col)
         writer.save()
 
         # plot data from the day
         data = [dfout.ot_acc.tolist(), dfout.det_acc.tolist()]
-        utl.serverplot.plot(data, plot_title, plot_path)
+        utl.serverplot.plot(data, plot_data, name_list)
 
         # check to see where to move data to
         out_dir = dropbox_path 
@@ -102,8 +106,8 @@ def analysis_main():
         
         # add data to historical database and plot historical data
         long_plot = analysis.historicaldata.longterm(dropbox_path, region, historical_path)
-        utl.serverplot.plot(long_plot[0], (region + ' Long Term Analysis'), (historical_path + '/' + region.lower() + '/' + region + '_Chart.png'))
-        utl.serverplot.plot(long_plot[1], 'Long Term Server Accuracy', historical_path + '/all/AllData_Chart.png')
+        utl.serverplot.plot(long_plot[0], [(historical_path + '/' + region.lower() + '/' + region + '_Chart.png'), (region + ' Long Term Analysis')], all_servers)
+        utl.serverplot.plot(long_plot[1], [historical_path + '/all/AllData_Chart.png', 'Long Term Server Accuracy'], all_servers)
 
 if __name__ == "__main__":
     analysis_main()

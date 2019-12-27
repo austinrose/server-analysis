@@ -2,12 +2,9 @@ from bs4 import BeautifulSoup
 import urllib.request
 import pandas as pd
 
-def htmlfind(df_all):
-    unique_fid = df_all.flightid.unique()
+def search_fa():
 
-    divert_list = []
-
-    for fid in unique_fid:
+        fid = input('Please enter flight ID: ')
 
         new_val = False
 
@@ -41,8 +38,7 @@ def htmlfind(df_all):
         divert_rows = df_out[df_out.duration == 'Diverted'].date
 
         # identify when this flight was diverted as identified from test servers
-        flight_rows = df_all[df_all.flightid == fid]
-        divert_date = flight_rows.diversion_time.unique()[0]
+        divert_date = input('Please Enter Divert Date: ')
 
         if len(divert_date) == 0:
             divert_date = flight_rows.rowtime.unique()[0]
@@ -98,12 +94,3 @@ def htmlfind(df_all):
                         new_val = True
                     elif testday == (realday + 1):
                         new_val = True
-            
-        divert_list.append(new_val)
-
-    
-    # combine fid list and truth list into data frame and reutrn that
-    df = pd.DataFrame([unique_fid, divert_list])
-    df = df.transpose()
-    df.columns = ['flightid', 'divert']
-    return df

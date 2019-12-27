@@ -1,11 +1,11 @@
 import pandas as pd
 import os
+import numpy as np
 
 def longterm(my_path, region, historical_path):
 
     # open blank pkl from long-term/tmp
     slate = pd.read_pickle(my_path +'/long-term/tmp/blankdf.pkl')
-    slate = slate.drop(columns=['server'])
 
     # establish path to analysis directory
     done_files = my_path
@@ -19,33 +19,27 @@ def longterm(my_path, region, historical_path):
             if region in check_list:
                 get_path = check_path + '/' + region
                 df_add = pd.read_pickle(get_path + '/' + region + file + '_df.pkl')
-                df_add = df_add.drop(columns=['server'])
-                if len(df_add) == 3:
-                    slate.loc[0] += df_add.loc[0]
-                    slate.loc[2] += df_add.loc[1]
-                    slate.loc[3] += df_add.loc[2]
-                elif len(df_add) == 4:
-                    slate = slate + df_add
-    
+                for server in df_add.server.unique():
+                    index = slate[slate.server == server].index[0]
+                    add_ind = df_add[df_add.server == server].index[0]    
+                    slate.loc[index] += df_add.loc[add_ind]
+                    slate.iloc[index, 7] = server
+                    
     long_data = slate
     
-    # identify region and open proper file to add to
+    # identify region and open proper file to add to   
     if region == 'DFW':
         filename = historical_path +'/dfw/dfw_long.pkl'
     elif region == 'GTAA':
         filename = historical_path +'/gtaa/gtaa_long.pkl'
 
-
     # find new value for on time accuracy and detection accuracy
     otval = 100 * (1 - ((long_data.false + long_data.missot + long_data.missed) / (long_data.true + long_data.missed)))
-    otval = round(otval, 2)
-    long_data.ot_acc = otval
+    long_data.ot_acc = np.around(otval.astype(np.double),2)
 
     detval = 100 * (1 - ((long_data.false + long_data.missed) / (long_data.true + long_data.missed)))
-    detval = round(detval, 2)
-    long_data.det_acc = detval
+    long_data.det_acc = np.around(detval.astype(np.double),2)
 
-    long_data['server'] = ['server2', 'server3', 'server4', 'server6']
 
     plot_data = [long_data.ot_acc.tolist(), long_data.det_acc.tolist()]
 
@@ -57,6 +51,7 @@ def longterm(my_path, region, historical_path):
     gtaa_all = pd.read_pickle(my_path +'/long-term/gtaa/gtaa_long.pkl')
 
     # remove server name column
+    servers = dfw_all.server.tolist()
     dfw_all.drop(columns=['server'])
     gtaa_all.drop(columns = ['server'])
     
@@ -65,15 +60,13 @@ def longterm(my_path, region, historical_path):
 
      # calculate new on time accuracy and detection accuracy
     ot = 100 * (1 - ((all_data.false + all_data.missot + all_data.missed) / (all_data.true + all_data.missed)))
-    ot = round(ot, 2)
-    all_data.ot_acc = ot
+    all_data.ot_acc = np.around(ot.astype(np.double),2)
 
     det = 100 * (1 - ((all_data.false + all_data.missed) / (all_data.true + all_data.missed)))
-    det = round(det, 2)
-    all_data.det_acc = det
+    all_data.det_acc = np.around(det.astype(np.double),2)
 
     # add server column back in
-    all_data['server'] = ['server2', 'server3', 'server4', 'server6']
+    all_data['server'] = servers
 
     # get data to plot
     all_plot = [all_data.ot_acc.tolist(), all_data.det_acc.tolist()]
