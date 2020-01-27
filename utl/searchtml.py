@@ -64,31 +64,10 @@ def htmlfind(df_all):
             testmonth = testdate[3:6]
             testyear = int(testdate[7::])
 
-            if testmonth == 'Jan':
-                testmonth = 1
-            elif testmonth == 'Feb':
-                testmonth = 2
-            elif testmonth == 'Mar':
-                testmonth = 3
-            elif testmonth == 'Apr':
-                testmonth = 4
-            elif testmonth == 'May':
-                testmonth = 5
-            elif testmonth == 'Jun':
-                testmonth = 6
-            elif testmonth == 'Jul':
-                testmonth = 7
-            elif testmonth == 'Aug':
-                testmonth = 8
-            elif testmonth == 'Sep':
-                testmonth = 9
-            elif testmonth == 'Oct':
-                testmonth = 10
-            elif testmonth == 'Nov':
-                testmonth = 11
-            elif testmonth == 'Dec':
-                testmonth = 12
+            monthnum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+            monthword = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
+            testmonth = monthnum[monthword.index(testmonth)]
 
             if testyear == realyear:
                 if testmonth == realmonth:
@@ -98,6 +77,51 @@ def htmlfind(df_all):
                         new_val = True
                     elif testday == (realday + 1):
                         new_val = True
+
+        if (new_val == False):
+            origin = flight_rows.origin.unique()[0]
+            dest_orig = flight_rows.orig_dest.unique()[0]
+            dest_new = flight_rows.asdi_dest.unique()[0]
+
+            rows = df_out[df_out.duration != 'Diverted']
+            if len(rows) != 0:
+                counter = 0
+
+                for index in range(1, len(rows) - 1):
+                    row = rows.iloc[index]
+                    # init date check val to see if the date is correct
+                    dc = False
+                    date = row.date
+                    date = date[0:len(date) - 1]
+                    testday = int(date[0:2])
+                    testmonth = date[3:6]
+                    testyear = int(date[7::])
+                    monthnum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                    monthword = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    testmonth = monthnum[monthword.index(testmonth)]
+
+                    if testyear == realyear:
+                        if testmonth == realmonth:
+                            if testday == realday:
+                                dc = True
+                            elif testday == (realday - 1):
+                                dc = True
+                            elif testday == (realday + 1):
+                                dc = True
+
+                    if dc == True:
+                        test_origin = row.origin
+                        test_origin = test_origin[(test_origin.index('(') + 1):test_origin.index(')')]
+                        if (origin == test_origin) or (origin == dest_orig):
+                            test_dest = row.destination
+                            test_dest = test_dest[(test_dest.index('(') + 1):test_dest.index(')')]
+                            if (test_dest == dest_orig) or (test_dest == dest_new):
+                                counter += 1
+
+                    if counter >= 2:
+                        new_val = True
+
+
             
         divert_list.append(new_val)
 
