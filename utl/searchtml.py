@@ -61,7 +61,7 @@ def htmlfind(df_all):
             testdate = testdate[0:len(testdate) - 1]
 
             testday = int(testdate[0:2])
-            testmonth = testdate[3:6]
+            testmonth = testdate[3:6] #strftime
             testyear = int(testdate[7::])
 
             monthnum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
@@ -69,14 +69,10 @@ def htmlfind(df_all):
 
             testmonth = monthnum[monthword.index(testmonth)]
 
-            if testyear == realyear:
-                if testmonth == realmonth:
-                    if testday == realday:
-                        new_val = True
-                    elif testday == (realday - 1):
-                        new_val = True
-                    elif testday == (realday + 1):
-                        new_val = True
+            if testyear == (realyear and realmonth):
+                if testday == (realday or (realday - 1) or (realday _ 1)):
+                    new_val = True
+
 
         if (new_val == False):
             origin = flight_rows.origin.unique()[0]
@@ -100,18 +96,13 @@ def htmlfind(df_all):
                     monthword = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
                     testmonth = monthnum[monthword.index(testmonth)]
 
-                    if testyear == realyear:
-                        if testmonth == realmonth:
-                            if testday == realday:
-                                dc = True
-                            elif testday == (realday - 1):
-                                dc = True
-                            elif testday == (realday + 1):
-                                dc = True
+                    if testyear == (realyear and realmonth):
+                        if testday == (realday or (realday - 1) or (realday _ 1)):
+                            new_val = True
 
                     if dc == True:
                         test_origin = row.origin
-                        test_origin = test_origin[(test_origin.index('(') + 1):test_origin.index(')')]
+                        test_origin = test_origin[(test_origin.index('(') + 1):test_origin.index(')')] # potentially shorten
                         if (origin == test_origin) or (origin == dest_orig):
                             test_dest = row.destination
                             test_dest = test_dest[(test_dest.index('(') + 1):test_dest.index(')')]

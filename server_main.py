@@ -24,10 +24,10 @@ def analysis_main():
 
     for file in filelist:
         # print file name that is currently being analyzed
-        print(file)
+        print(file) #logger
 
         # get the date and region from filename
-        date = file[(file.index('.') - 8):(file.index('.'))]
+        date = file[(file.index('.') - 8):(file.index('.'))] #regex
         region = file[0:(file.index('.') - 8)]
 
         # get full file path
@@ -48,7 +48,7 @@ def analysis_main():
 
         # concatenate all server data into one data frame
         df_all = server_df[0]
-        df_all.append(server_df[1])
+        df_all.append(server_df[1])  #.apply
         for i in range(len(server_df)):
                 df_all = df_all.append(server_df[i])
         
