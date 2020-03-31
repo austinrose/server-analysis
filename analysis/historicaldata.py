@@ -32,6 +32,8 @@ def longterm(my_path, region, historical_path):
         filename = historical_path +'/dfw/dfw_long.pkl'
     elif region == 'GTAA':
         filename = historical_path +'/gtaa/gtaa_long.pkl'
+    elif region == 'EUROPE':
+        filename = historical_path +'/europe/europe_long.pkl'
 
     # find new value for on time accuracy and detection accuracy
     otval = 100 * (1 - ((long_data.false + long_data.missot + long_data.missed) / (long_data.true + long_data.missed)))
@@ -49,14 +51,16 @@ def longterm(my_path, region, historical_path):
     all_data = pd.read_pickle(my_path +'/long-term/tmp/blankdf.pkl')
     dfw_all = pd.read_pickle(my_path +'/long-term/dfw/dfw_long.pkl')
     gtaa_all = pd.read_pickle(my_path +'/long-term/gtaa/gtaa_long.pkl')
+    europe_all = pd.read_pickle(my_path + '/long-term/europe/europe_long.pkl')
 
     # remove server name column
     servers = dfw_all.server.tolist()
     dfw_all.drop(columns=['server'])
     gtaa_all.drop(columns = ['server'])
+    europe_all.drop(columns = ['server'])
     
     # add dfw and gtaa data frames
-    all_data = dfw_all + gtaa_all
+    all_data = dfw_all + gtaa_all + europe_all
 
      # calculate new on time accuracy and detection accuracy
     ot = 100 * (1 - ((all_data.false + all_data.missot + all_data.missed) / (all_data.true + all_data.missed)))

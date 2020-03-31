@@ -48,7 +48,7 @@ def htmlfind(df_all):
             divert_date = flight_rows.rowtime.unique()[0]
 
         realdate = divert_date[0:divert_date.index(' ')]
-
+        
         # extract month day and year from date
         realday = int(realdate[8::])
         realmonth = int(realdate[5:7])
@@ -69,9 +69,14 @@ def htmlfind(df_all):
 
             testmonth = monthnum[monthword.index(testmonth)]
 
-            if testyear == (realyear and realmonth):
-                if testday == (realday or (realday - 1) or (realday _ 1)):
-                    new_val = True
+            if testyear == realyear:
+                if testmonth == realmonth:
+                    if testday == realday:
+                        new_val = True
+                    elif testday == (realday - 1):
+                        new_val = True
+                    elif testday == (realday + 1):
+                        new_val = True
 
 
         if (new_val == False):
@@ -97,7 +102,7 @@ def htmlfind(df_all):
                     testmonth = monthnum[monthword.index(testmonth)]
 
                     if testyear == (realyear and realmonth):
-                        if testday == (realday or (realday - 1) or (realday _ 1)):
+                        if testday == (realday or (realday - 1) or (realday + 1)):
                             new_val = True
 
                     if dc == True:

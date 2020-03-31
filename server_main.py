@@ -10,6 +10,7 @@ import analysis.servercheck
 import analysis.serverstats
 import utl.serverplot
 import analysis.historicaldata
+import utl.euro_convert
 
 def analysis_main():
     all_servers = ['dev-fused02', 'dev-fused03', 'prod-fused04', 'prod-fused06', 'prod-fused07']
@@ -21,6 +22,7 @@ def analysis_main():
     new_data = my_path + '/tmp'
     filelist = [f for f in os.listdir(new_data) if (os.path.isfile(os.path.join(new_data, f)) and f.endswith(".csv"))]
     historical_path = dropbox_path +'/long-term'
+    code_path = my_path + '/utl/ICAO_IATA_ref.pkl'
 
     for file in filelist:
         # print file name that is currently being analyzed
@@ -48,10 +50,15 @@ def analysis_main():
 
         # concatenate all server data into one data frame
         df_all = server_df[0]
-        df_all.append(server_df[1])  #.apply
+        df_all.append(server_df[1], ignore_index=True)  #.apply
         for i in range(len(server_df)):
-                df_all = df_all.append(server_df[i])
+            df_all = df_all.append(server_df[i], ignore_index=True)
         
+        #convert ICAO codes to IATA codes for Euro sheets
+        if region == 'EUROPE':
+            df_all = utl.euro_convert.icao2iata(df_all, code_path)
+
+
         # look up all unqiue flights on flightaware and return list of unique fid's concatenated to a list of whether they diverted or not
         found_data = utl.searchtml.htmlfind(df_all)
 
